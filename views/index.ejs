@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+
+   <meta charset="utf-8">
+   <title>Jeju Alerts from Connet</title>
+   <link href="StyleSheet.css" rel="stylesheet">
+</head>
+<body>
+   <div id="map">
+      <div class="custom_typecontrol radius_border">
+         <span id="btnRoadmap" class="btn" onclick="setMapType('roadmap')">Map</span>
+         <span id="btnSkyview" class="selected_btn" onclick="setMapType('skyview')">Skyview</span>
+      </div>
+      <!-- 지도 확대, 축소 컨트롤 div 입니다 -->
+      <div class="custom_zoomcontrol radius_border">
+         <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png"
+               alt="확대"></span>
+         <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png"
+               alt="축소"></span>
+      </div>
+
+   </div>
+</div>
+
+<script type="text/javascript"
+   src="//dapi.kakao.com/v2/maps/sdk.js?appkey=apikey"></script>
+<script>
+   var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+      mapOption = {
+         center: new kakao.maps.LatLng(33.286506, 126.286355), // 지도의 중심좌표
+         level: 3, // 지도의 확대 레벨
+
+      };
+
+   var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+   map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);
+
+   function setMapType(maptype) {
+      var roadmapControl = document.getElementById('btnRoadmap');
+      var skyviewControl = document.getElementById('btnSkyview');
+      if (maptype === 'roadmap') {
+         map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);
+         roadmapControl.className = 'selected_btn';
+         skyviewControl.className = 'btn';
+      } else {
+         map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);
+         skyviewControl.className = 'selected_btn';
+         roadmapControl.className = 'btn';
+      }
+   }
+   var content = '<div class="overlaybox">' +
+      '    <div class="boxtitle">St.Johnsbury Academy Jeju</div>' +
+      '    <div class="first">' +
+      '        <div class="movietitle text">COVID-19 Cases: 0</div>' +
+      '    </div>' +
+      '    <ul>' +
+      '        <li class="up">' +
+      '            <span class="title">Korea International School</span>' +
+      '            <span class="arrow up"></span>' +
+      '            <span class="count">2</span>' +
+      '        </li>' +
+      '        <li>' +
+      '            <span class="title">Branksome Hall Asia</span>' +
+      '            <span class="arrow up"></span>' +
+      '            <span class="count">3</span>' +
+      '        </li>' +
+      '        <li>' +
+      '            <span class="title">North London Collegiate School</span>' +
+      '            <span class="arrow up"></span>' +
+      '            <span class="count">0</span>' +
+      '        </li>' +
+      '    </ul>' +
+      '</div>';
+
+   // 커스텀 오버레이가 표시될 위치입니다 
+   var position = new kakao.maps.LatLng(33.286506, 126.286355);
+
+   // 커스텀 오버레이를 생성합니다
+   var customOverlay = new kakao.maps.CustomOverlay({
+      position: position,
+      content: content,
+      xAnchor: 0.3,
+      yAnchor: 0.91
+   });
+
+   // 커스텀 오버레이를 지도에 표시합니다
+   customOverlay.setMap(map);
+   // 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
+   function zoomIn() {
+      map.setLevel(map.getLevel() - 1);
+   }
+
+   // 지도 확대, 축소 컨트롤에서 축소 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
+   function zoomOut() {
+      map.setLevel(map.getLevel() + 1);
+   }
+
+
+</script>
+
+   <div class="alMainAlert">We are currently beta testing our application, bugs may exists. Please report them to
+      heojoey2004@gmail.com</div>
+   <div id="lowerleft">
+      <h5>Created and Programmed by Joey Heo | Original Idea from Bennie Ko</h5>
+      <div id="infection-message">
+         <div class="navbar">
+            <button onclick="showElement1()"class="active">Home</button>
+            <button onclick="showElement2()">Emergency Message</button>
+            <button onclick="showElement3()">About</button>
+          </div>
+         <div class="list-container">
+            <div class="header-container">
+               <div class="covid-label-container">
+                <h2>Jeju Alerts from Connet</h2>
+                <h4>Created by Joey Heo and Idea by Yoonseo (Bennie) Ko</h4>
+                <h5>Last Updated: <%= updatedDate[0] %></h5>
+                <pre></pre>
+                <h3>South Korea</h3>
+               <div class="total-statistics-container">
+                 
+                     <div class="dr-container2">
+                       <span class="dr-confirmed-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#4169E1">CONFIRMED</a></span>
+                       <span class="confirmed-increase"><b><%= confirmed_increase[0] %></b></span>
+                       <span class="confirmed-center"><b><%= confirmedNumber[0] %></b></span>
+                       
+                      
+                      </div>
+               </div>
+               <pre></pre>
+
+               <div class="total-statistics-container">
+                  <div class="dr-container">
+                    <span class="dr-deaths-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#d24545">DEATHS</a></span>
+                    <span class="dr-recovered-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#4caf50">RECOVERED</a></span>
+                    <span class="death-center"><b><%= deathNumber[0] %></b></span>
+                    
+                    <span class="recovered-center"><b><%= recoveredNumber[0] %></b></span>
+                    <span class="death-increase"><b><%= death_increase[0] %> </b></span>
+                    <span class="recovered-increase"><b><%= recovered_increase[0] %></b></span>
+                  </div>
+                  </div>
+                  <pre></pre>
+                  <pre></pre>
+                  <pre></pre>
+                <h3>Jeju-do</h3>
+               <div class="total-statistics-container">
+                 
+                     <div class="dr-container2">
+                       <span class="dr-confirmed-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#4169E1">CONFIRMED</a></span>
+                       <span class="confirmed-increase"><b><%= jejuconfirmed_increase[0] %></b></span>
+                       <span class="confirmed-center"><b><%= jejuconfirmedNumber[0] %></b></span>
+                       
+                      
+                      </div>
+               </div>
+               <pre></pre>
+
+               <div class="total-statistics-container">
+                  <div class="dr-container">
+                    <span class="dr-deaths-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#d24545">DEATHS</a></span>
+                    <span class="dr-recovered-label"><a href="http://ncov.mohw.go.kr/en" style= "color:#4caf50">RECOVERED</a></span>
+                    <span class="death-center"><b><%= jejudeathNumber[0] %></b></span>
+                    
+                    <span class="recovered-center"><b><%= jejurecoveredNumber[0] %></b></span>
+                    <span class="death-increase"><b><%= jejudeath_increase[0] %> </b></span>
+                    <span class="recovered-increase"><b><%= jejurecovered_increase[0] %></b></span>
+                  </div>
+                  </div>
+                  <div class="dr-container4">
+
+                  </div>
+             </div>
+            </div>
+         </div>
+      </div>
+      <div id="em-message">
+         <div class="navbar">
+            <button onclick="showElement1()">Home</button>
+            <button onclick="showElement2()" class="active">Emergency Message</button>
+            <button onclick="showElement3()">About</button>
+          </div>
+         <div class="list-container">
+            <div class="header-container">
+               <div class="covid-label-container">
+                <h2>Emergency Message from Connet</h2>
+                <h4>Created by Joey Heo and Idea by Yoonseo (Bennie) Ko</h4>
+                <h5>A system that offers automatic translation into different languages</h5>
+                <pre></pre>
+
+            </div>
+         </div>
+      </div>
+
+      <div id="about-message">
+         <div class="navbar">
+            <button onclick="showElement1()">Home</button>
+            <button onclick="showElement2()">Emergency Message</button>
+            <button onclick="showElement3()" class="active">About</button>
+          </div>
+         <div class="list-container">
+            <div class="header-container">
+               <div class="covid-label-container">
+                <h2>Jeju Alerts: Project of Connet</h2>
+                <h4>Project created, programmed, planned, designed, structured, hosted, edited, and built by Joey Heo. Idea by Yoonseo (Bennie) Ko.</h4>
+                <h5>COVID-19 Information Dashboard</h5>
+                <pre></pre>
+            </div>
+         </div>
+      </div>
+
+      <script type="text/javascript"> 
+         function showElement1() { 
+             element1 = document.querySelector('#infection-message');
+             element2 = document.querySelector('#em-message');  
+             element3 = document.querySelector('#about-message'); 
+             element1.style.visibility = 'visible'; 
+             element2.style.visibility = 'hidden'; 
+             element3.style.visibility = 'hidden'; 
+         } 
+
+         function showElement2() { 
+            element1 = document.querySelector('#infection-message');
+             element2 = document.querySelector('#em-message');  
+             element3 = document.querySelector('#about-message'); 
+             element1.style.visibility = 'hidden'; 
+             element2.style.visibility = 'visible'; 
+             element3.style.visibility = 'hidden'; 
+         } 
+
+         function showElement3() { 
+             element1 = document.querySelector('#infection-message');
+             element2 = document.querySelector('#em-message');  
+             element3 = document.querySelector('#about-message'); 
+             element1.style.visibility = 'hidden'; 
+             element2.style.visibility = 'hidden'; 
+             element3.style.visibility = 'visible'; 
+         } 
+     </script> 
+
+      
+</body>
+
+</html>
